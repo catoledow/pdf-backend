@@ -1,4 +1,4 @@
-FROM node:16.16.0 as base
+FROM node:16-alpine
 
 # Add package file
 COPY package.json ./
@@ -14,13 +14,6 @@ COPY tsconfig.json ./tsconfig.json
 
 # Build dist
 RUN yarn build
-
-# Start production image build
-FROM gcr.io/distroless/nodejs:16
-
-# Copy node modules and build directory
-COPY --from=base ./node_modules ./node_modules
-COPY --from=base /dist /dist
 
 # Copy static files
 COPY src/public dist/src/public
