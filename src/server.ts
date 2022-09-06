@@ -1,9 +1,16 @@
 /* eslint-disable import/first */
 import dotenv from 'dotenv';
+import { exit } from 'process';
 
 const result = dotenv.config();
 if (result.error) {
   dotenv.config({ path: '.env.default' });
+}
+
+if (!process.env.COS_API_KEY || !process.env.SERVICE_INSTANCE_ID || !process.env.ENDPOINT) {
+  console.log('ENV VARIABLES NOT FOUND - YOUR SETUP IS INCORRECT');
+  console.log(process.env);
+  process.exit(1);
 }
 
 import util from 'util';

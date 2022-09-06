@@ -124,3 +124,4 @@ Temporary Items
 
 dist
 data
+.env.default

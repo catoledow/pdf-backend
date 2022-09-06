@@ -1,15 +1,12 @@
 import { Pdf } from "./pdf";
 import { S3 } from  'ibm-cos-sdk';
-import { Error, GetObjectOutput } from "ibm-cos-sdk/clients/s3";
-import { createReadStream, ReadStream } from "fs";
 import { Readable } from 'stream';
-import logger from "../logger";
 
 export class PdfsService {
   private static cos = new S3({
-    'apiKeyId': "EUT-Ym1mTF8xT426XTLgV5QknTh8PEKAIhElXf-IKdHI",
-    'serviceInstanceId': "crn:v1:bluemix:public:cloud-object-storage:global:a/e65910fa61ce9072d64902d03f3d4774:8f8217cb-efd9-419d-85e4-dc9daffc9391::",
-    'endpoint': 's3.us-east.cloud-object-storage.appdomain.cloud',
+    'apiKeyId': process.env.COS_API_KEY,
+    'serviceInstanceId': process.env.SERVICE_INSTANCE_ID,
+    'endpoint': process.env.ENDPOINT,
     'signatureVersion': 'iam'
   });
   
