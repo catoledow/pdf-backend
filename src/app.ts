@@ -6,6 +6,7 @@ import ApplicationError from './errors/application-error';
 import logger from './logger';
 import { RegisterRoutes } from '../dist/routes';
 import swaggerUi from "swagger-ui-express";
+import cors, { CorsOptions, CorsRequest } from 'cors';
 
 const app = express();
 
@@ -26,8 +27,31 @@ function logResponseTime(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-app.use(logResponseTime);
+const whitelist = [
+  'https://pdf-frontend-default.carlos-cluster0-2bef1f4b4097001da9502000c44fc2b2-0000.us-east.containers.appdomain.cloud'
+];
 
+function corsOptionsDelegate<T extends Request = Request>(
+  req: T,
+  callback: (err: Error | null, options?: CorsOptions) => void
+): void {
+  let corsOptions: boolean = false;
+  const originDomain = req.header('Origin') || '';
+
+  const isDomainAllowed = whitelist.indexOf(originDomain) !== -1;
+
+  if (isDomainAllowed && process.env.NODE_ENV !== 'development') {
+    // Enable CORS for this request
+    corsOptions = true;
+  }
+
+  logger.info(`CORS options:`, corsOptions);
+
+  callback(null, { origin: corsOptions });
+}
+
+app.use(cors<Request>(corsOptionsDelegate));
+app.use(logResponseTime);
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
