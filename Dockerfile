@@ -1,9 +1,5 @@
 FROM registry.access.redhat.com/ubi8/nodejs-16
 
-USER root
-RUN dnf -y update-minimal --security --sec-severity=Important \
-    --sec-severity=Critical && dnf clean all
-
 USER 1001
 
 WORKDIR /opt/app-root/src
