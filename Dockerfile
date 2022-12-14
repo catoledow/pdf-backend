@@ -12,13 +12,14 @@ COPY src ./src
 
 # fix for root-owned files in .npm
 USER root
-RUN chown -R 1001:0 "/.npm"
 
 # Install deps and build
-USER 1001
 RUN npm install -g yarn 
 RUN yarn install
 RUN yarn build 
+RUN chown -R 1001:0 /opt/app-root/src
+
+USER 1001
 RUN mkdir logs
 
 # Copy static files
