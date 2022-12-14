@@ -20,7 +20,7 @@ RUN yarn build
 RUN chown -R 1001:0 /opt/app-root/src
 
 USER 1001
-RUN mkdir logs
+RUN mkdir logs && mkdir dist/src/logs
 
 # Copy static files
 COPY src/public dist/src/public
