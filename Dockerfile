@@ -14,7 +14,7 @@ COPY src ./src
 USER root
 
 # Install deps and build
-RUN npm install -g yarn 
+# RUN npm install -g yarn 
 RUN yarn install
 RUN yarn build 
 RUN chown -R 1001:0 /opt/app-root/src
