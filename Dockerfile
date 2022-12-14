@@ -11,7 +11,10 @@ COPY package.json yarn.lock tsoa.json tsconfig.json ./
 COPY src ./src
 
 # Install deps and build
-RUN npm install -g yarn -s && yarn install && yarn build && mkdir logs
+RUN npm install -g yarn 
+RUN yarn install
+RUN yarn build 
+RUN mkdir logs
 
 # Copy static files
 COPY src/public dist/src/public
