@@ -1,19 +1,21 @@
-FROM node:16-alpine
+FROM registry.access.redhat.com/ubi8/nodejs-16
+
+USER root
+RUN dnf -y update-minimal --security --sec-severity=Important \
+    --sec-severity=Critical && dnf clean all
+
+USER 1001
+
+WORKDIR /opt/app-root/src
 
 # Add package file
-COPY package.json ./
-COPY yarn.lock ./
-COPY tsoa.json ./
-
-# Install deps
-RUN yarn install
+COPY package.json yarn.lock tsoa.json tsconfig.json ./
 
 # Copy source
 COPY src ./src
-COPY tsconfig.json ./tsconfig.json
 
-# Build dist
-RUN yarn build
+# Install deps and build
+RUN npm install -g yarn -s && yarn install && yarn build && mkdir logs
 
 # Copy static files
 COPY src/public dist/src/public
