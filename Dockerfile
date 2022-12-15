@@ -1,4 +1,4 @@
-FROM nodejs-16:1-72.1669834625
+FROM registry.access.redhat.com/ubi8/nodejs-16
 
 USER 1001
 
@@ -10,21 +10,12 @@ COPY package.json yarn.lock tsoa.json tsconfig.json ./
 # Copy source
 COPY src ./src
 
-# fix for root-owned files in .npm
-USER root
-
 # Install deps and build
-# RUN npm install -g yarn 
-RUN yarn install
-RUN yarn build 
-RUN chown -R 1001:0 /opt/app-root/src
-
-USER 1001
-RUN mkdir logs && mkdir dist/src/logs
+RUN npm install -g yarn && yarn install && yarn build && chmod +x dist/src/server.js
 
 # Copy static files
 COPY src/public dist/src/public
 
 # Expose port 3000
 EXPOSE 3000
-CMD ["dist/src/server.js"]
+CMD node dist/src/server.js

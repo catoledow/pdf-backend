@@ -6,9 +6,8 @@ import {
 import ConsoleLoggerTransport from './lib/winston-console-transport';
 
 const logTransports = [
-  new transports.File({
+  new transports.Console({
     level: 'error',
-    filename: './logs/error.log',
     format: format.json({
       replacer: (key, value) => {
         if (key === 'error') {
